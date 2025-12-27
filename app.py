@@ -9,17 +9,6 @@ st.set_page_config(
     layout="centered"
 )
 
-# ================= THEME TOGGLE =================
-if "theme" not in st.session_state:
-    st.session_state.theme = "dark"
-
-theme_toggle = st.toggle(
-    "🌗 Light / Dark Mode",
-    value=(st.session_state.theme == "light")
-)
-
-st.session_state.theme = "light" if theme_toggle else "dark"
-
 # ================= LOAD MODEL =================
 @st.cache_resource
 def load_model():
@@ -29,54 +18,42 @@ def load_model():
 
 model, scaler = load_model()
 
-# ================= THEME COLORS =================
-bg_dark = "#020617"
-bg_light = "#f8fafc"
-card_dark = "rgba(255,255,255,0.06)"
-card_light = "rgba(0,0,0,0.05)"
-text_dark = "#ffffff"
-text_light = "#020617"
-
-bg = bg_light if st.session_state.theme == "light" else bg_dark
-card = card_light if st.session_state.theme == "light" else card_dark
-text = text_light if st.session_state.theme == "light" else text_dark
-
 # ================= CUSTOM CSS =================
-st.markdown(f"""
+st.markdown("""
 <style>
-.stApp {{
-    background: {bg};
-    color: {text};
-}}
+.stApp {
+    background: radial-gradient(circle at top, #020617, #020617);
+    color: white;
+}
 
-html, body, [class*="css"] {{
-    color: {text};
-}}
+html, body, [class*="css"] {
+    color: white;
+}
 
-.title {{
+.title {
     font-size: 2.6rem;
     font-weight: 800;
     text-align: center;
     background: linear-gradient(90deg, #f43f5e, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}}
+}
 
-.subtitle {{
+.subtitle {
     text-align: center;
     color: #9ca3af;
     margin-bottom: 30px;
-}}
+}
 
-.card {{
-    background: {card};
+.card {
+    background: rgba(255,255,255,0.06);
     backdrop-filter: blur(14px);
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 0 40px rgba(0,0,0,0.4);
-}}
+}
 
-.stButton>button {{
+.stButton>button {
     width: 100%;
     border-radius: 14px;
     padding: 0.8rem;
@@ -85,45 +62,45 @@ html, body, [class*="css"] {{
     background: linear-gradient(90deg, #ec4899, #f43f5e);
     color: white;
     border: none;
-}}
+}
 
-.risk-high {{
+.risk-high {
     background: linear-gradient(135deg, #7f1d1d, #991b1b);
     padding: 20px;
     border-radius: 16px;
     color: #fecaca;
-}}
+}
 
-.risk-low {{
+.risk-low {
     background: linear-gradient(135deg, #064e3b, #065f46);
     padding: 20px;
     border-radius: 16px;
     color: #bbf7d0;
-}}
+}
 
-.badge {{
+.badge {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 999px;
     font-weight: 700;
     margin-top: 10px;
-}}
+}
 
-.footer {{
+.footer {
     text-align: center;
     font-size: 0.85rem;
     color: #6b7280;
     margin-top: 25px;
-}}
+}
 
-@media (max-width: 768px) {{
-    .card {{
+@media (max-width: 768px) {
+    .card {
         padding: 20px;
-    }}
-    .title {{
+    }
+    .title {
         font-size: 2rem;
-    }}
-}}
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -191,7 +168,7 @@ if st.button("🔍 Predict Heart Disease Risk"):
             f"""
             <div class="risk-high">
                 <h3>⚠️ High Risk Detected</h3>
-                <span class="badge" style="background:#fecaca;color:#7f1d1d;">
+                <span class="badge">
                     Probability: {risk_percent:.2f}%
                 </span>
             </div>
@@ -203,7 +180,7 @@ if st.button("🔍 Predict Heart Disease Risk"):
             f"""
             <div class="risk-low">
                 <h3>✅ Low Risk Detected</h3>
-                <span class="badge" style="background:#bbf7d0;color:#064e3b;">
+                <span class="badge">
                     Probability: {risk_percent:.2f}%
                 </span>
             </div>
