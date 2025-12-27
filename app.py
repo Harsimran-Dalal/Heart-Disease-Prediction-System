@@ -19,6 +19,9 @@ def load_model():
 model, scaler = load_model()
 
 # ---------------- CUSTOM CSS ----------------
+# ---------------- CUSTOM CSS ----------------
+st.markdown("""
+<style>
 /* ---- Background ---- */
 .main {
     background: radial-gradient(circle at top, #111827, #020617);
@@ -77,7 +80,7 @@ model, scaler = load_model()
     color: #bbf7d0;
 }
 
-/* ---- Probability Badge ---- */
+/* ---- Badge ---- */
 .badge {
     display: inline-block;
     padding: 6px 14px;
@@ -93,6 +96,8 @@ model, scaler = load_model()
     color: #6b7280;
     margin-top: 25px;
 }
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------- TITLE ----------------
 st.markdown("<div class='title'>💗 Heart Disease Prediction</div>", unsafe_allow_html=True)
@@ -147,39 +152,37 @@ if st.button("🔍 Predict Heart Disease Risk"):
     prediction = model.predict(input_scaled)[0]
     probability = model.predict_proba(input_scaled)[0][1]
 
+    risk_percent = probability * 100
+
     st.markdown("---")
+    st.markdown("### 🧠 Prediction Result")
+    st.progress(min(int(risk_percent), 100))
 
-risk_percent = probability * 100
+    if prediction == 1:
+        st.markdown(
+            f"""
+            <div class="risk-high">
+                <h3>⚠️ High Risk Detected</h3>
+                <span class="badge" style="background:#fecaca;color:#7f1d1d;">
+                    Probability: {risk_percent:.2f}%
+                </span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+    else:
+        st.markdown(
+            f"""
+            <div class="risk-low">
+                <h3>✅ Low Risk Detected</h3>
+                <span class="badge" style="background:#bbf7d0;color:#064e3b;">
+                    Probability: {risk_percent:.2f}%
+                </span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
-st.markdown("### 🧠 Prediction Result")
-
-st.progress(min(int(risk_percent), 100))
-
-if prediction == 1:
-    st.markdown(
-        f"""
-        <div class="risk-high">
-            <h3>⚠️ High Risk Detected</h3>
-            <span class="badge" style="background:#fecaca;color:#7f1d1d;">
-                Probability: {risk_percent:.2f}%
-            </span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-else:
-    st.markdown(
-        f"""
-        <div class="risk-low">
-            <h3>✅ Low Risk Detected</h3>
-            <span class="badge" style="background:#bbf7d0;color:#064e3b;">
-                Probability: {risk_percent:.2f}%
-            </span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    
 # ---------------- FOOTER ----------------
 st.markdown(
     "<div class='footer'>For educational purposes only • Not a medical diagnosis</div>",
