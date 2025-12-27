@@ -9,17 +9,6 @@ st.set_page_config(
     layout="centered"
 )
 
-# ================= THEME TOGGLE =================
-if "theme" not in st.session_state:
-    st.session_state.theme = "dark"
-
-theme_toggle = st.toggle(
-    "🌗 Light / Dark Mode",
-    value=(st.session_state.theme == "light")
-)
-
-st.session_state.theme = "light" if theme_toggle else "dark"
-
 # ================= LOAD MODEL =================
 @st.cache_resource
 def load_model():
@@ -29,97 +18,83 @@ def load_model():
 
 model, scaler = load_model()
 
-# ================= THEME COLORS =================
-bg_dark = "#020617"
-bg_light = "#f8fafc"
-card_dark = "rgba(255,255,255,0.06)"
-card_light = "rgba(0,0,0,0.05)"
-text_dark = "#ffffff"
-text_light = "#020617"
-
-bg = bg_light if st.session_state.theme == "light" else bg_dark
-card = card_light if st.session_state.theme == "light" else card_dark
-text = text_light if st.session_state.theme == "light" else text_dark
-
 # ================= CUSTOM CSS =================
-st.markdown(f"""
+st.markdown("""
 <style>
-.main {{
-    background: {bg};
-    color: {text};
-}}
+/* ---- Background ---- */
+.main {
+    background: radial-gradient(circle at top, #111827, #020617);
+}
 
-.title {{
-    font-size: 2.6rem;
+/* ---- Title ---- */
+.title {
+    font-size: 2.8rem;
     font-weight: 800;
     text-align: center;
     background: linear-gradient(90deg, #f43f5e, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}}
+}
 
-.subtitle {{
+/* ---- Subtitle ---- */
+.subtitle {
     text-align: center;
     color: #9ca3af;
     margin-bottom: 30px;
-}}
+}
 
-.card {{
-    background: {card};
-    backdrop-filter: blur(14px);
+/* ---- Glass Card ---- */
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(15px);
     border-radius: 20px;
     padding: 30px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.4);
-}}
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+}
 
-.stButton>button {{
+/* ---- Button ---- */
+.stButton>button {
     width: 100%;
     border-radius: 14px;
     padding: 0.8rem;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 600;
     background: linear-gradient(90deg, #ec4899, #f43f5e);
     color: white;
     border: none;
-}}
+}
 
-.risk-high {{
+/* ---- Risk Box ---- */
+.risk-high {
     background: linear-gradient(135deg, #7f1d1d, #991b1b);
     padding: 20px;
     border-radius: 16px;
     color: #fecaca;
-}}
+}
 
-.risk-low {{
+.risk-low {
     background: linear-gradient(135deg, #064e3b, #065f46);
     padding: 20px;
     border-radius: 16px;
     color: #bbf7d0;
-}}
+}
 
-.badge {{
+/* ---- Badge ---- */
+.badge {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 999px;
     font-weight: 700;
     margin-top: 10px;
-}}
+}
 
-.footer {{
+/* ---- Footer ---- */
+.footer {
     text-align: center;
     font-size: 0.85rem;
     color: #6b7280;
     margin-top: 25px;
-}}
-
-@media (max-width: 768px) {{
-    .card {{
-        padding: 20px;
-    }}
-    .title {{
-        font-size: 2rem;
-    }}
-}}
+}
 </style>
 """, unsafe_allow_html=True)
 
