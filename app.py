@@ -19,7 +19,6 @@ def load_model():
 model, scaler = load_model()
 
 # ---------------- CUSTOM CSS ----------------
-# ---------------- CUSTOM CSS ----------------
 st.markdown("""
 <style>
 /* ---- Background ---- */
