@@ -9,6 +9,14 @@ st.set_page_config(
     layout="centered"
 )
 
+# ---------------- THEME TOGGLE ----------------
+if "theme" not in st.session_state:
+    st.session_state.theme = "dark"
+
+theme = st.toggle("🌗 Light / Dark Mode", value=(st.session_state.theme == "light"))
+
+st.session_state.theme = "light" if theme else "dark"
+
 # ---------------- LOAD MODEL ----------------
 @st.cache_resource
 def load_model():
