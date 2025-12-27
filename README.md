@@ -80,7 +80,7 @@ The final model is deployed as a **user-friendly web application**.
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/your-username/heart-disease-prediction-system.git
+git clone https://github.com/Harsimran-Dalal/heart-disease-prediction-system.git
 cd heart-disease-prediction-system
 ```
 ### 2️⃣ Install dependencies
