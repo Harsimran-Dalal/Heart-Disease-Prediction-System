@@ -1,11 +1,17 @@
 import streamlit as st
 import numpy as np
 import joblib
+import os
 
 st.set_page_config(page_title="Heart Disease Predictor", layout="centered")
 
-model = joblib.load("rf_model.joblib")
-scaler = joblib.load("scaler.joblib")
+@st.cache_resource
+def load_model():
+    model = joblib.load("rf_model.joblib")
+    scaler = joblib.load("scaler.joblib")
+    return model, scaler
+
+model, scaler = load_model()
 
 st.title("Heart Disease Prediction App")
 
