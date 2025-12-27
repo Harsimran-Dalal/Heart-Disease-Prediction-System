@@ -1,3 +1,24 @@
+import streamlit as st
+import numpy as np
+import joblib
+
+# ---------------- PAGE CONFIG ----------------
+st.set_page_config(
+    page_title="Heart Disease Prediction",
+    page_icon="❤️",
+    layout="centered"
+)
+
+# ---------------- LOAD MODEL ----------------
+@st.cache_resource
+def load_model():
+    model = joblib.load("rf_model.joblib")
+    scaler = joblib.load("scaler.joblib")
+    return model, scaler
+
+model, scaler = load_model()
+
+# ---------------- CUSTOM CSS ----------------
 /* ---- Background ---- */
 .main {
     background: radial-gradient(circle at top, #111827, #020617);
@@ -72,3 +93,96 @@
     color: #6b7280;
     margin-top: 25px;
 }
+
+# ---------------- TITLE ----------------
+st.markdown("<div class='title'>💗 Heart Disease Prediction</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>AI-based clinical risk assessment</div>", unsafe_allow_html=True)
+
+# ---------------- INPUT CARD ----------------
+with st.container():
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        age = st.number_input("Age", min_value=1, max_value=120, value=45)
+        sex = st.selectbox("Sex", ["Male", "Female"])
+        cp = st.selectbox("Chest Pain Type", [0, 1, 2, 3])
+        trestbps = st.number_input("Resting Blood Pressure", 80, 200, 120)
+        chol = st.number_input("Cholesterol (mg/dl)", 100, 600, 200)
+
+    with col2:
+        fbs = st.selectbox("Fasting Blood Sugar > 120 mg/dl", ["No", "Yes"])
+        restecg = st.selectbox("Resting ECG", [0, 1, 2])
+        thalach = st.number_input("Max Heart Rate Achieved", 60, 220, 150)
+        exang = st.selectbox("Exercise Induced Angina", ["No", "Yes"])
+        oldpeak = st.number_input("ST Depression", 0.0, 6.0, 1.0)
+
+    slope = st.selectbox("Slope of ST Segment", [0, 1, 2])
+    ca = st.selectbox("Number of Major Vessels (0–4)", [0, 1, 2, 3, 4])
+    thal = st.selectbox("Thalassemia", [0, 1, 2, 3])
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# ---------------- PREDICTION ----------------
+st.markdown("##")
+if st.button("🔍 Predict Heart Disease Risk"):
+    input_data = np.array([
+        age,
+        1 if sex == "Male" else 0,
+        cp,
+        trestbps,
+        chol,
+        1 if fbs == "Yes" else 0,
+        restecg,
+        thalach,
+        1 if exang == "Yes" else 0,
+        oldpeak,
+        slope,
+        ca,
+        thal
+    ]).reshape(1, -1)
+
+    input_scaled = scaler.transform(input_data)
+    prediction = model.predict(input_scaled)[0]
+    probability = model.predict_proba(input_scaled)[0][1]
+
+    st.markdown("---")
+
+risk_percent = probability * 100
+
+st.markdown("### 🧠 Prediction Result")
+
+st.progress(min(int(risk_percent), 100))
+
+if prediction == 1:
+    st.markdown(
+        f"""
+        <div class="risk-high">
+            <h3>⚠️ High Risk Detected</h3>
+            <span class="badge" style="background:#fecaca;color:#7f1d1d;">
+                Probability: {risk_percent:.2f}%
+            </span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+else:
+    st.markdown(
+        f"""
+        <div class="risk-low">
+            <h3>✅ Low Risk Detected</h3>
+            <span class="badge" style="background:#bbf7d0;color:#064e3b;">
+                Probability: {risk_percent:.2f}%
+            </span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    
+# ---------------- FOOTER ----------------
+st.markdown(
+    "<div class='footer'>For educational purposes only • Not a medical diagnosis</div>",
+    unsafe_allow_html=True
+)
+
