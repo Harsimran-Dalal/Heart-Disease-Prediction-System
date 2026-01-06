@@ -93,7 +93,7 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This application is intended for educational purposes only.
 It should not be used as a substitute for professional medical diagnosis.
