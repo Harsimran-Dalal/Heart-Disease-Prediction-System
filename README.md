@@ -78,17 +78,17 @@ The final model is deployed as a **user-friendly web application**.
 
 ## Installation & Running Locally
 
-### 1️⃣ Clone the repository
+### 1️. Clone the repository
 ```bash
 git clone https://github.com/Harsimran-Dalal/heart-disease-prediction-system.git
 cd heart-disease-prediction-system
 ```
-### 2️⃣ Install dependencies
+### 2️. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Run the application
+### 3️. Run the application
 ```bash
 streamlit run app.py
 ```
